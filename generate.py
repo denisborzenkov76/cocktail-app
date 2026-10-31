@@ -1,14 +1,11 @@
 import os
 
-BASE = "app"
-
 def w(path, content):
-    full = os.path.join(BASE, path)
-    os.makedirs(os.path.dirname(full), exist_ok=True)
-    with open(full, "w", encoding="utf-8") as f:
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
         f.write(content)
 
-# ==================== SETTINGS ====================
+# ====== GRADLE CONFIGS ======
 w("settings.gradle.kts", """pluginManagement {
     repositories {
         google()
@@ -18,31 +15,25 @@ w("settings.gradle.kts", """pluginManagement {
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
+    repositories { google(); mavenCentral() }
 }
 rootProject.name = "CocktailApp"
 include(":app")
 """)
 
-# ==================== TOP BUILD ====================
-w("../build.gradle.kts", """plugins {
+w("build.gradle.kts", """plugins {
     id("com.android.application") version "8.2.0" apply false
     id("org.jetbrains.kotlin.android") version "1.9.20" apply false
 }
 """)
 
-# ==================== GRADLE PROPERTIES ====================
-w("../gradle.properties", """org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+w("gradle.properties", """org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
 android.useAndroidX=true
 kotlin.code.style=official
 android.nonTransitiveRClass=true
 """)
 
-# ==================== GRADLE WRAPPER ====================
-w("../gradle/wrapper/gradle-wrapper.properties", """distributionBase=GRADLE_USER_HOME
+w("gradle/wrapper/gradle-wrapper.properties", """distributionBase=GRADLE_USER_HOME
 distributionPath=wrapper/dists
 distributionUrl=https\\://services.gradle.org/distributions/gradle-8.2-bin.zip
 networkTimeout=10000
@@ -50,8 +41,8 @@ zipStoreBase=GRADLE_USER_HOME
 zipStorePath=wrapper/dists
 """)
 
-# ==================== APP BUILD ====================
-w("build.gradle.kts", """plugins {
+# ====== APP BUILD GRADLE ======
+w("app/build.gradle.kts", """plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
@@ -112,8 +103,8 @@ dependencies {
 }
 """)
 
-# ==================== MANIFEST ====================
-w("src/main/AndroidManifest.xml", """<?xml version="1.0" encoding="utf-8"?>
+# ====== MANIFEST & RESOURCES ======
+w("app/src/main/AndroidManifest.xml", """<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.cocktailapp">
 
@@ -136,15 +127,14 @@ w("src/main/AndroidManifest.xml", """<?xml version="1.0" encoding="utf-8"?>
 </manifest>
 """)
 
-# ==================== STRINGS ====================
-w("src/main/res/values/strings.xml", """<?xml version="1.0" encoding="utf-8"?>
+w("app/src/main/res/values/strings.xml", """<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Коктейли</string>
 </resources>
 """)
 
-# ==================== DATA ====================
-w("src/main/java/com/example/cocktailapp/data/Cocktail.kt", """package com.example.cocktailapp.data
+# ====== DATA ======
+w("app/src/main/java/com/example/cocktailapp/data/Cocktail.kt", """package com.example.cocktailapp.data
 
 data class Ingredient(
     val name: String,
@@ -165,154 +155,296 @@ data class Cocktail(
 )
 """)
 
-w("src/main/java/com/example/cocktailapp/data/CocktailManager.kt", """package com.example.cocktailapp.data
+# ====== UI THEME ======
+w("app/src/main/java/com/example/cocktailapp/ui/theme/Type.kt", """package com.example.cocktailapp.ui.theme
 
-object CocktailManager {
+import androidx.compose.material3.Typography
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 
-    internal val initialCocktails = listOf(
-        Cocktail(
-            id = 1, name = "Маргарита", base = "Теквила", imageEmoji = "🍹", color = 0xFF4CAF50,
-            ingredients = listOf(
-                Ingredient("Теквила", "50 мл"),
-                Ingredient("Ликёр Контра", "20 мл"),
-                Ingredient("Сок лайма", "15 мл")
-            ),
-            instructions = "Нанесите соль на край бокала. Наполните шейкер льдом, добавьте теквилу, Контра и сок лайма. Хорошо взбейте. Перелейте в бокал с соленым краем.",
-            glass = "Бокал маргариты", garnish = "Долька лайма"
-        ),
-        Cocktail(
-            id = 2, name = "Джин Тоник", base = "Джин", imageEmoji = "🫧", color = 0xFF8BC34A,
-            ingredients = listOf(
-                Ingredient("Джин", "50 мл"),
-                Ingredient("Тоник", "150 мл"),
-                Ingredient("Лимон", "1 долька")
-            ),
-            instructions = "Наполните бокал льдом. Налейте джин и тоник. Перемешайте барной ложкой. Украсьте долькой лимона.",
-            glass = "Бокал хайбол", garnish = "Долька лимона"
-        ),
-        Cocktail(
-            id = 3, name = "Мохито", base = "Ром", imageEmoji = "🌿", color = 0xFF66BB6A,
-            ingredients = listOf(
-                Ingredient("Белый ром", "50 мл"),
-                Ingredient("Сахарный сироп", "20 мл"),
-                Ingredient("Сок лайма", "30 мл"),
-                Ingredient("Содовая", "100 мл"),
-                Ingredient("Мята", "8 листочков")
-            ),
-            instructions = "Положите листочки мяты в бокал, добавьте сахарный сироп и слегка подавите. Добавьте сок лайма. Наполните бокал льдом, влейте ром. Долейте содовую. Перемешайте.",
-            glass = "Хайбол", garnish = "Мята и лайм"
-        ),
-        Cocktail(
-            id = 4, name = "Водка Сода", base = "Водка", imageEmoji = "💧", color = 0xFF29B6F6,
-            ingredients = listOf(
-                Ingredient("Водка", "50 мл"),
-                Ingredient("Содовая", "150 мл"),
-                Ingredient("Лимон", "1 долька")
-            ),
-            instructions = "Наполните бокал льдом. Налейте водку, долейте содовую. Перемешайте. Украсьте долькой лимона.",
-            glass = "Хайбол", garnish = "Долька лимона"
-        ),
-        Cocktail(
-            id = 5, name = "Олд Фэшн", base = "Виски", imageEmoji = "🥃", color = 0xFF8D6E63,
-            ingredients = listOf(
-                Ingredient("Бурбон", "60 мл"),
-                Ingredient("Ангостура биттерс", "2-3 капли"),
-                Ingredient("Сахар", "1 кубик")
-            ),
-            instructions = "Положите кубик сахара в роколин, добавьте ангостура биттерс. Растолките до растворения. Добавьте бурбон и большой кубик льда. Аккуратно перемешайте.",
-            glass = "Роколин", garnish = "Апельсиновая цедра"
-        ),
-        Cocktail(
-            id = 6, name = "Пина Колада", base = "Ром", imageEmoji = "🥥", color = 0xFFFFECB3,
-            ingredients = listOf(
-                Ingredient("Белый ром", "50 мл"),
-                Ingredient("Кокосовые сливки", "60 мл"),
-                Ingredient("Ананасовый сок", "90 мл"),
-                Ingredient("Лёд", "100 г")
-            ),
-            instructions = "Все ингредиенты поместите в блендер. Взбивайте до однородной кремовой массы. Перелейте в бокал гиарини.",
-            glass = "Гиарини", garnish = "Долька ананаса"
-        ),
-        Cocktail(
-            id = 7, name = "Негрони", base = "Джин", imageEmoji = "🔴", color = 0xFFE53935,
-            ingredients = listOf(
-                Ingredient("Джин", "30 мл"),
-                Ingredient("Кампари", "30 мл"),
-                Ingredient("Сладкий вермут", "30 мл")
-            ),
-            instructions = "Наполните роколин льдом. Налейте джин, кампари и сладкий вермут. Аккуратно перемешайте. Украсьте долькой апельсина.",
-            glass = "Роколин", garnish = "Долька апельсина"
-        ),
-        Cocktail(
-            id = 8, name = "Дайкири", base = "Ром", imageEmoji = "🍋", color = 0xFFFDD835,
-            ingredients = listOf(
-                Ingredient("Белый ром", "60 мл"),
-                Ingredient("Сок лайма", "30 мл"),
-                Ingredient("Сахарный сироп", "15 мл")
-            ),
-            instructions = "Наполните шейкер льдом, добавьте ром, сок лайма и сахарный сироп. Хорошо взбейте. Процедите в охлаждённый бокал.",
-            glass = "Бокал маргариты", garnish = "Долька лайма"
-        ),
-        Cocktail(
-            id = 9, name = "Текила Санрайз", base = "Теквила", imageEmoji = "🌅", color = 0xFFFF7043,
-            ingredients = listOf(
-                Ingredient("Теквила", "50 мл"),
-                Ingredient("Апельсиновый сок", "120 мл"),
-                Ingredient("Гранатовый сироп", "10 мл")
-            ),
-            instructions = "Наполните хайбол льдом, налейте теквилу и апельсиновый сок. Перемешайте. Аккуратно влейте гранатовый сироп.",
-            glass = "Хайбол", garnish = "Долька лимона"
-        ),
-        Cocktail(
-            id = 10, name = "Апероль Шприц", base = "Вино", imageEmoji = "🧡", color = 0xFFFF6E40,
-            ingredients = listOf(
-                Ingredient("Апероль", "60 мл"),
-                Ingredient("Просекко", "90 мл"),
-                Ingredient("Содовая", "30 мл")
-            ),
-            instructions = "Наполните бокал хайбол льдом доверху. Налейте апероль, просекко и содовую. Аккуратно перемешайте.",
-            glass = "Хайбол", garnish = "Долька апельсина"
-        ),
-        Cocktail(
-            id = 11, name = "Манхэттен", base = "Ржаной виски", imageEmoji = "🏙️", color = 0xFF8E24AA,
-            ingredients = listOf(
-                Ingredient("Ржаной виски", "60 мл"),
-                Ingredient("Сладкий вермут", "30 мл"),
-                Ingredient("Ангостура биттерс", "2 капли")
-            ),
-            instructions = "Наполните стакан льдом, добавьте виски, вермут и биттерс. Перемешайте 30 секунд. Процедите в охлаждённый бокал.",
-            glass = "Бокал для мартини", garnish = "Вишня марахини"
-        ),
-        Cocktail(
-            id = 12, name = "Клубничное Просекко", base = "Водка", imageEmoji = "🍾", color = 0xFFF0F4C3,
-            ingredients = listOf(
-                Ingredient("Водка", "30 мл"),
-                Ingredient("Просекко", "120 мл"),
-                Ingredient("Клубничный сироп", "15 мл"),
-                Ingredient("Клубника", "3 штуки")
-            ),
-            instructions = "Положите клубнику в бокал и подавите. Добавьте водку и клубничный сироп. Аккуратно долейте просекко.",
-            glass = "Флюте", garnish = "Свежая клубника"
-        ),
-        Cocktail(
-            id = 13, name = "Белый Рус", base = "Водка", imageEmoji = "🥛", color = 0xFFD7CCC8,
-            ingredients = listOf(
-                Ingredient("Водка", "40 мл"),
-                Ingredient("Тёмный ром", "20 мл"),
-                Ingredient("Сливки", "30 мл")
-            ),
-            instructions = "Наполните роколин льдом. Налейте водку, тёмный ром и сливки. Аккуратно перемешайте.",
-            glass = "Роколин", garnish = "Без украшения"
-        ),
-        Cocktail(
-            id = 14, name = "Куба Либре", base = "Ром", imageEmoji = "🇨🇺", color = 0xFF6D4C41,
-            ingredients = listOf(
-                Ingredient("Светлый ром", "50 мл"),
-                Ingredient("Кока-Кола", "120 мл"),
-                Ingredient("Сок лайма", "15 мл")
-            ),
-            instructions = "Наполните хайбол льдом. Налейте ром и сок лайма. Долейте кока-колу. Перемешайте.",
-            glass = "Хайбол", garnish = "Долька лайма"
-        ),
-        Cocktail(
-            id = 15, name = "Гинз Тоник с огурцом", base = "Джин", imageEmoji = "🥒", color
+val Typography = Typography(
+    bodyLarge = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp
+    ),
+    labelSmall = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Medium,
+        fontSize = 11.sp
+    )
+)
+""")
+
+w("app/src/main/java/com/example/cocktailapp/ui/theme/Theme.kt", """package com.example.cocktailapp.ui.theme
+
+import android.app.Activity
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
+
+private val DarkColorScheme = darkColorScheme(
+    primary = Color(0xFFBB86FC),
+    secondary = Color(0xFF03DAC6),
+    tertiary = Color(0xFF3700B3),
+    background = Color(0xFF121212),
+    surface = Color(0xFF1E1E1E),
+    onPrimary = Color.White,
+    onSecondary = Color.Black,
+    onSurface = Color(0xFFE0E0E0)
+)
+
+private val LightColorScheme = lightColorScheme(
+    primary = Color(0xFF6200EE),
+    secondary = Color(0xFF03DAC6),
+    tertiary = Color(0xFF3700B3),
+    background = Color(0xFFF5F5F5),
+    surface = Color.White,
+    onPrimary = Color.White,
+    onSecondary = Color.Black,
+    onSurface = Color(0xFF212121)
+)
+
+@Composable
+fun CocktailAppTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
+    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = colorScheme.primary.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+        }
+    }
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = Typography,
+        content = content
+    )
+}
+""")
+
+# ====== NAVIGATION ======
+w("app/src/main/java/com/example/cocktailapp/ui/navigation/Screen.kt", """package com.example.cocktailapp.ui.navigation
+
+sealed class Screen(val route: String) {
+    object Main : Screen("main")
+    object CocktailDetail : Screen("cocktail_detail/{cocktailId}") {
+        fun createRoute(cocktailId: Int) = "cocktail_detail/$cocktailId"
+    }
+    object CocktailsManagement : Screen("cocktails_management")
+    object CocktailEdit : Screen("cocktail_edit/{id}") {
+        fun createRoute(id: String) = "cocktail_edit/$id"
+    }
+}
+""")
+
+# ====== VIEWMODEL ======
+w("app/src/main/java/com/example/cocktailapp/ui/viewmodel/CocktailViewModel.kt", """package com.example.cocktailapp.ui.viewmodel
+
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import com.example.cocktailapp.data.Cocktail
+import com.example.cocktailapp.data.CocktailManager
+
+class CocktailViewModel : ViewModel() {
+
+    val cocktails: MutableList<Cocktail> = mutableStateListOf()
+
+    var searchQuery by mutableStateOf("")
+        private set
+
+    var selectedBase by mutableStateOf("Все")
+        private set
+
+    var filteredCocktails by mutableStateOf(emptyList<Cocktail>())
+        private set
+
+    init {
+        cocktails.addAll(CocktailManager.initialCocktails)
+        filterCocktails()
+    }
+
+    fun setSearchQuery(query: String) {
+        searchQuery = query
+        filterCocktails()
+    }
+
+    fun setSelectedBase(base: String) {
+        selectedBase = base
+        filterCocktails()
+    }
+
+    private fun filterCocktails() {
+        var result = cocktails.toList()
+        if (searchQuery.isNotBlank()) {
+            result = result.filter { it.name.contains(searchQuery, ignoreCase = true) }
+        }
+        if (selectedBase != "Все") {
+            result = result.filter { it.base == selectedBase }
+        }
+        filteredCocktails = result
+    }
+
+    fun getCocktailById(id: Int): Cocktail? = cocktails.find { it.id == id }
+
+    fun addCocktail(cocktail: Cocktail) {
+        val newCocktail = cocktail.copy(id = CocktailManager.generateNextId())
+        cocktails.add(newCocktail)
+        filterCocktails()
+    }
+
+    fun updateCocktail(cocktail: Cocktail) {
+        val index = cocktails.indexOfFirst { it.id == cocktail.id }
+        if (index != -1) {
+            cocktails[index] = cocktail
+            filterCocktails()
+        }
+    }
+
+    fun deleteCocktail(id: Int) {
+        cocktails.removeAll { it.id == id }
+        filterCocktails()
+    }
+
+    fun updateIngredientCheck(cocktailId: Int, ingredientIndex: Int, isChecked: Boolean) {
+        val cocktail = cocktails.find { it.id == cocktailId } ?: return
+        val updatedIngredients = cocktail.ingredients.toMutableList()
+        updatedIngredients[ingredientIndex] = updatedIngredients[ingredientIndex].copy(isChecked = isChecked)
+        val updatedCocktail = cocktail.copy(ingredients = updatedIngredients)
+        val index = cocktails.indexOfFirst { it.id == cocktailId }
+        if (index != -1) cocktails[index] = updatedCocktail
+    }
+
+    fun isAllIngredientsChecked(cocktailId: Int): Boolean {
+        val cocktail = cocktails.find { it.id == cocktailId } ?: return false
+        return cocktail.ingredients.all { it.isChecked }
+    }
+
+    fun resetCocktailChecks(cocktailId: Int) {
+        val cocktail = cocktails.find { it.id == cocktailId } ?: return
+        val updated = cocktail.copy(ingredients = cocktail.ingredients.map { it.copy(isChecked = false) })
+        updateCocktail(updated)
+    }
+}
+""")
+
+# ====== MAIN SCREEN ======
+w("app/src/main/java/com/example/cocktailapp/ui/screens/MainScreen.kt", """package com.example.cocktailapp.ui.screens
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Sort
+import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import com.example.cocktailapp.data.Cocktail
+import com.example.cocktailapp.data.CocktailManager
+import com.example.cocktailapp.ui.viewmodel.CocktailViewModel
+
+@Composable
+fun MainScreen(
+    viewModel: CocktailViewModel,
+    onCocktailClick: (Int) -> Unit,
+    onManageCocktails: () -> Unit
+) {
+    var showDropdown by remember { mutableStateOf(false) }
+
+    Surface(
+        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "🍸 Коктейли",
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.weight(1f)
+                )
+                IconButton(onClick = onManageCocktails) {
+                    Icon(Icons.Default.Settings, contentDescription = "Управление", tint = MaterialTheme.colorScheme.onSurface)
+                }
+            }
+
+            Text(
+                text = "Выберите коктейль и приготовьте его!",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+            OutlinedTextField(
+                value = viewModel.searchQuery,
+                onValueChange = { viewModel.setSearchQuery(it) },
+                modifier = Modifier.fillMaxWidth(),
+                placeholder = { Text("Поиск по названию...") },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                trailingIcon = {
+                    if (viewModel.searchQuery.isNotEmpty()) {
+                        IconButton(onClick = { viewModel.setSearchQuery("") }) {
+                            Icon(Icons.Default.Clear, contentDescription = "Очистить")
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+                keyboardActions
