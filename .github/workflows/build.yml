@@ -19,180 +19,141 @@ jobs:
         mkdir -p gradle/wrapper
 
     - name: Create settings.gradle.kts
-      run: cat > settings.gradle.kts << 'EOF'
-pluginManagement {
-    repositories { google(); mavenCentral(); gradlePluginPortal() }
-}
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories { google(); mavenCentral() }
-}
-rootProject.name = "CocktailApp"
-include(":app")
-EOF
+      run: |
+        echo 'pluginManagement {' > settings.gradle.kts
+        echo '    repositories { google(); mavenCentral(); gradlePluginPortal() }' >> settings.gradle.kts
+        echo '}' >> settings.gradle.kts
+        echo 'dependencyResolutionManagement {' >> settings.gradle.kts
+        echo '    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)' >> settings.gradle.kts
+        echo '    repositories { google(); mavenCentral() }' >> settings.gradle.kts
+        echo '}' >> settings.gradle.kts
+        echo 'rootProject.name = "CocktailApp"' >> settings.gradle.kts
+        echo 'include(":app")' >> settings.gradle.kts
 
     - name: Create app/build.gradle.kts
-      run: cat > app/build.gradle.kts << 'EOF'
-plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-}
-android {
-    namespace = "com.example.cocktailapp"
-    compileSdk = 34
-    defaultConfig {
-        applicationId = "com.example.cocktailapp"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables { useSupportLibrary = true }
-    }
-    buildTypes {
-        release { isMinifyEnabled = false }
-    }
-    compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
-    kotlinOptions { jvmTarget = "17" }
-    buildFeatures { compose = true }
-    composeOptions { kotlinCompilerExtensionVersion = "1.5.5" }
-    packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
-}
-dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation(platform("androidx.compose:compose-bom:2023.10.01"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("androidx.compose.foundation:foundation-layout")
-    implementation("androidx.navigation:navigation-compose:2.7.6")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.10.01"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
-}
-EOF
+      run: |
+        echo 'plugins {' > app/build.gradle.kts
+        echo '    id("com.android.application")' >> app/build.gradle.kts
+        echo '    id("org.jetbrains.kotlin.android")' >> app/build.gradle.kts
+        echo '}' >> app/build.gradle.kts
+        echo 'android {' >> app/build.gradle.kts
+        echo '    namespace = "com.example.cocktailapp"' >> app/build.gradle.kts
+        echo '    compileSdk = 34' >> app/build.gradle.kts
+        echo '    defaultConfig {' >> app/build.gradle.kts
+        echo '        applicationId = "com.example.cocktailapp"' >> app/build.gradle.kts
+        echo '        minSdk = 24' >> app/build.gradle.kts
+        echo '        targetSdk = 34' >> app/build.gradle.kts
+        echo '        versionCode = 1' >> app/build.gradle.kts
+        echo '        versionName = "1.0"' >> app/build.gradle.kts
+        echo '        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"' >> app/build.gradle.kts
+        echo '        vectorDrawables { useSupportLibrary = true }' >> app/build.gradle.kts
+        echo '    }' >> app/build.gradle.kts
+        echo '    buildTypes {' >> app/build.gradle.kts
+        echo '        release { isMinifyEnabled = false }' >> app/build.gradle.kts
+        echo '    }' >> app/build.gradle.kts
+        echo '    compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }' >> app/build.gradle.kts
+        echo '    kotlinOptions { jvmTarget = "17" }' >> app/build.gradle.kts
+        echo '    buildFeatures { compose = true }' >> app/build.gradle.kts
+        echo '    composeOptions { kotlinCompilerExtensionVersion = "1.5.5" }' >> app/build.gradle.kts
+        echo '    packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }' >> app/build.gradle.kts
+        echo '}' >> app/build.gradle.kts
+        echo 'dependencies {' >> app/build.gradle.kts
+        echo '    implementation("androidx.core:core-ktx:1.12.0")' >> app/build.gradle.kts
+        echo '    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")' >> app/build.gradle.kts
+        echo '    implementation("androidx.activity:activity-compose:1.8.2")' >> app/build.gradle.kts
+        echo '    implementation(platform("androidx.compose:compose-bom:2023.10.01"))' >> app/build.gradle.kts
+        echo '    implementation("androidx.compose.ui:ui")' >> app/build.gradle.kts
+        echo '    implementation("androidx.compose.ui:ui-graphics")' >> app/build.gradle.kts
+        echo '    implementation("androidx.compose.ui:ui-tooling-preview")' >> app/build.gradle.kts
+        echo '    implementation("androidx.compose.material3:material3")' >> app/build.gradle.kts
+        echo '    implementation("androidx.compose.material:material-icons-extended")' >> app/build.gradle.kts
+        echo '    implementation("androidx.compose.foundation:foundation-layout")' >> app/build.gradle.kts
+        echo '    implementation("androidx.navigation:navigation-compose:2.7.6")' >> app/build.gradle.kts
+        echo '    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")' >> app/build.gradle.kts
+        echo '    testImplementation("junit:junit:4.13.2")' >> app/build.gradle.kts
+        echo '    androidTestImplementation("androidx.test.ext:junit:1.1.5")' >> app/build.gradle.kts
+        echo '    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")' >> app/build.gradle.kts
+        echo '    androidTestImplementation(platform("androidx.compose:compose-bom:2023.10.01"))' >> app/build.gradle.kts
+        echo '    androidTestImplementation("androidx.compose.ui:ui-test-junit4")' >> app/build.gradle.kts
+        echo '    debugImplementation("androidx.compose.ui:ui-tooling")' >> app/build.gradle.kts
+        echo '    debugImplementation("androidx.compose.ui:ui-test-manifest")' >> app/build.gradle.kts
+        echo '}' >> app/build.gradle.kts
 
     - name: Create build.gradle.kts
-      run: cat > build.gradle.kts << 'EOF'
-plugins {
-    id("com.android.application") version "8.2.0" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.20" apply false
-}
-EOF
+      run: |
+        echo 'plugins {' > build.gradle.kts
+        echo '    id("com.android.application") version "8.2.0" apply false' >> build.gradle.kts
+        echo '    id("org.jetbrains.kotlin.android") version "1.9.20" apply false' >> build.gradle.kts
+        echo '}' >> build.gradle.kts
 
     - name: Create gradle.properties
-      run: cat > gradle.properties << 'EOF'
-org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
-android.useAndroidX=true
-kotlin.code.style=official
-android.nonTransitiveRClass=true
-EOF
+      run: |
+        echo 'org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' > gradle.properties
+        echo 'android.useAndroidX=true' >> gradle.properties
+        echo 'kotlin.code.style=official' >> gradle.properties
+        echo 'android.nonTransitiveRClass=true' >> gradle.properties
 
     - name: Create gradle-wrapper.properties
-      run: cat > gradle/wrapper/gradle-wrapper.properties << 'EOF'
-distributionBase=GRADLE_USER_HOME
-distributionPath=wrapper/dists
-distributionUrl=https\://services.gradle.org/distributions/gradle-8.2-bin.zip
-networkTimeout=10000
-zipStoreBase=GRADLE_USER_HOME
-zipStorePath=wrapper/dists
-EOF
+      run: |
+        echo 'distributionBase=GRADLE_USER_HOME' > gradle/wrapper/gradle-wrapper.properties
+        echo 'distributionPath=wrapper/dists' >> gradle/wrapper/gradle-wrapper.properties
+        echo 'distributionUrl=https\://services.gradle.org/distributions/gradle-8.2-bin.zip' >> gradle/wrapper/gradle-wrapper.properties
+        echo 'networkTimeout=10000' >> gradle/wrapper/gradle-wrapper.properties
+        echo 'zipStoreBase=GRADLE_USER_HOME' >> gradle/wrapper/gradle-wrapper.properties
+        echo 'zipStorePath=wrapper/dists' >> gradle/wrapper/gradle-wrapper.properties
 
     - name: Create AndroidManifest.xml
-      run: cat > app/src/main/AndroidManifest.xml << 'EOF'
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.cocktailapp">
-    <application android:allowBackup="true" android:label="Коктейли" android:supportsRtl="true" android:theme="@android:style/Theme.Material.Light.NoActionBar">
-        <activity android:name=".ui.MainActivity" android:exported="true" android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
-</manifest>
-EOF
+      run: |
+        echo '<?xml version="1.0" encoding="utf-8"?>' > app/src/main/AndroidManifest.xml
+        echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.cocktailapp">' >> app/src/main/AndroidManifest.xml
+        echo '    <application android:allowBackup="true" android:label="Коктейли" android:supportsRtl="true" android:theme="@android:style/Theme.Material.Light.NoActionBar">' >> app/src/main/AndroidManifest.xml
+        echo '        <activity android:name=".ui.MainActivity" android:exported="true" android:windowSoftInputMode="adjustResize">' >> app/src/main/AndroidManifest.xml
+        echo '            <intent-filter>' >> app/src/main/AndroidManifest.xml
+        echo '                <action android:name="android.intent.action.MAIN" />' >> app/src/main/AndroidManifest.xml
+        echo '                <category android:name="android.intent.category.LAUNCHER" />' >> app/src/main/AndroidManifest.xml
+        echo '            </intent-filter>' >> app/src/main/AndroidManifest.xml
+        echo '        </activity>' >> app/src/main/AndroidManifest.xml
+        echo '    </application>' >> app/src/main/AndroidManifest.xml
+        echo '</manifest>' >> app/src/main/AndroidManifest.xml
 
     - name: Create strings.xml
-      run: cat > app/src/main/res/values/strings.xml << 'EOF'
-<?xml version="1.0" encoding="utf-8"?>
-<resources><string name="app_name">Коктейли</string></resources>
-EOF
+      run: |
+        echo '<?xml version="1.0" encoding="utf-8"?>' > app/src/main/res/values/strings.xml
+        echo '<resources><string name="app_name">Коктейли</string></resources>' >> app/src/main/res/values/strings.xml
 
     - name: Create Cocktail.kt
-      run: cat > app/src/main/java/com/example/cocktailapp/data/Cocktail.kt << 'EOF'
-package com.example.cocktailapp.data
-data class Ingredient(val name: String, val amount: String, val isChecked: Boolean = false)
-data class Cocktail(
-    val id: Int, val name: String, val base: String, val imageEmoji: String,
-    val color: Long, val ingredients: List<Ingredient>, val instructions: String,
-    val glass: String, val garnish: String
-)
-EOF
+      run: |
+        echo 'package com.example.cocktailapp.data' > app/src/main/java/com/example/cocktailapp/data/Cocktail.kt
+        echo 'data class Ingredient(val name: String, val amount: String, val isChecked: Boolean = false)' >> app/src/main/java/com/example/cocktailapp/data/Cocktail.kt
+        echo 'data class Cocktail(' >> app/src/main/java/com/example/cocktailapp/data/Cocktail.kt
+        echo '    val id: Int, val name: String, val base: String, val imageEmoji: String,' >> app/src/main/java/com/example/cocktailapp/data/Cocktail.kt
+        echo '    val color: Long, val ingredients: List<Ingredient>, val instructions: String,' >> app/src/main/java/com/example/cocktailapp/data/Cocktail.kt
+        echo '    val glass: String, val garnish: String' >> app/src/main/java/com/example/cocktailapp/data/Cocktail.kt
+        echo ')' >> app/src/main/java/com/example/cocktailapp/data/Cocktail.kt
 
     - name: Create Screen.kt
-      run: cat > app/src/main/java/com/example/cocktailapp/ui/navigation/Screen.kt << 'EOF'
-package com.example.cocktailapp.ui.navigation
-sealed class Screen(val route: String) {
-    object Main : Screen("main")
-    object CocktailDetail : Screen("cocktail_detail/{cocktailId}") {
-        fun createRoute(cocktailId: Int) = "cocktail_detail/$cocktailId"
-    }
-    object CocktailsManagement : Screen("cocktails_management")
-    object CocktailEdit : Screen("cocktail_edit/{id}") {
-        fun createRoute(id: String) = "cocktail_edit/$id"
-    }
-}
-EOF
+      run: |
+        echo 'package com.example.cocktailapp.ui.navigation' > app/src/main/java/com/example/cocktailapp/ui/navigation/Screen.kt
+        echo 'sealed class Screen(val route: String) {' >> app/src/main/java/com/example/cocktailapp/ui/navigation/Screen.kt
+        echo '    object Main : Screen("main")' >> app/src/main/java/com/example/cocktailapp/ui/navigation/Screen.kt
+        echo '    object CocktailDetail : Screen("cocktail_detail/{cocktailId}") {' >> app/src/main/java/com/example/cocktailapp/ui/navigation/Screen.kt
+        echo '        fun createRoute(cocktailId: Int) = "cocktail_detail/$cocktailId"' >> app/src/main/java/com/example/cocktailapp/ui/navigation/Screen.kt
+        echo '    }' >> app/src/main/java/com/example/cocktailapp/ui/navigation/Screen.kt
+        echo '    object CocktailsManagement : Screen("cocktails_management")' >> app/src/main/java/com/example/cocktailapp/ui/navigation/Screen.kt
+        echo '    object CocktailEdit : Screen("cocktail_edit/{id}") {' >> app/src/main/java/com/example/cocktailapp/ui/navigation/Screen.kt
+        echo '        fun createRoute(id: String) = "cocktail_edit/$id"' >> app/src/main/java/com/example/cocktailapp/ui/navigation/Screen.kt
+        echo '    }' >> app/src/main/java/com/example/cocktailapp/ui/navigation/Screen.kt
+        echo '}' >> app/src/main/java/com/example/cocktailapp/ui/navigation/Screen.kt
 
     - name: Create CocktailManager.kt
-      run: cat > app/src/main/java/com/example/cocktailapp/data/CocktailManager.kt << 'EOF'
-package com.example.cocktailapp.data
-object CocktailManager {
-    internal val initialCocktails = listOf(
-        Cocktail(1, "Маргарита", "Теквила", "🍹", 0xFF4CAF50, listOf(Ingredient("Теквила", "50 мл"), Ingredient("Ликёр Контра", "20 мл"), Ingredient("Сок лайма", "15 мл")), "Нанесите соль на край бокала. Наполните шейкер льдом, добавьте теквилу, Контра и сок лайма. Хорошо взбейте. Перелейте в бокал.", "Бокал маргариты", "Долька лайма"),
-        Cocktail(2, "Джин Тоник", "Джин", "🫧", 0xFF8BC34A, listOf(Ingredient("Джин", "50 мл"), Ingredient("Тоник", "150 мл"), Ingredient("Лимон", "1 долька")), "Наполните бокал льдом. Налейте джин и тоник. Перемешайте. Украсьте долькой лимона.", "Бокал хайбол", "Долька лимона"),
-        Cocktail(3, "Мохито", "Ром", "🌿", 0xFF66BB6A, listOf(Ingredient("Белый ром", "50 мл"), Ingredient("Сахарный сироп", "20 мл"), Ingredient("Сок лайма", "30 мл"), Ingredient("Содовая", "100 мл"), Ingredient("Мята", "8 листочков")), "Положите мяту, добавьте сироп и лайм. Наполните льдом, влейте ром и содовую.", "Хайбол", "Мята и лайм"),
-        Cocktail(4, "Водка Сода", "Водка", "💧", 0xFF29B6F6, listOf(Ingredient("Водка", "50 мл"), Ingredient("Содовая", "150 мл"), Ingredient("Лимон", "1 долька")), "Наполните бокал льдом. Налейте водку, долейте содовую. Перемешайте.", "Хайбол", "Долька лимона"),
-        Cocktail(5, "Олд Фэшн", "Виски", "🥃", 0xFF8D6E63, listOf(Ingredient("Бурбон", "60 мл"), Ingredient("Ангостура биттерс", "2-3 капли"), Ingredient("Сахар", "1 кубик")), "Растолките сахар с биттерс. Добавьте бурбон и лёд. Перемешайте.", "Роколин", "Апельсиновая цедра"),
-        Cocktail(6, "Пина Колада", "Ром", "🥥", 0xFFFFECB3, listOf(Ingredient("Белый ром", "50 мл"), Ingredient("Кокосовые сливки", "60 мл"), Ingredient("Ананасовый сок", "90 мл"), Ingredient("Лёд", "100 г")), "Взбейте всё в блендере. Перелейте в бокал.", "Гиарини", "Долька ананаса"),
-        Cocktail(7, "Негрони", "Джин", "🔴", 0xFFE53935, listOf(Ingredient("Джин", "30 мл"), Ingredient("Кампари", "30 мл"), Ingredient("Сладкий вермут", "30 мл")), "Наполните роколин льдом. Налейте джин, кампари и вермут. Перемешайте.", "Роколин", "Долька апельсина"),
-        Cocktail(8, "Дайкири", "Ром", "🍋", 0xFFFDD835, listOf(Ingredient("Белый ром", "60 мл"), Ingredient("Сок лайма", "30 мл"), Ingredient("Сахарный сироп", "15 мл")), "Взбейте ром, лайм и сироп со льдом. Процедите.", "Бокал маргариты", "Долька лайма"),
-        Cocktail(9, "Текила Санрайз", "Теквила", "🌅", 0xFFFF7043, listOf(Ingredient("Теквила", "50 мл"), Ingredient("Апельсиновый сок", "120 мл"), Ingredient("Гранатовый сироп", "10 мл")), "Налейте теквилу и апельсиновый сок. Аккуратно влейте гранатовый сироп.", "Хайбол", "Долька лимона"),
-        Cocktail(10, "Апероль Шприц", "Вино", "🧡", 0xFFFF6E40, listOf(Ingredient("Апероль", "60 мл"), Ingredient("Просекко", "90 мл"), Ingredient("Содовая", "30 мл")), "Наполните бокал льдом. Налейте апероль, просекко и содовую.", "Хайбол", "Долька апельсина"),
-        Cocktail(11, "Манхэттен", "Ржаной виски", "🏙️", 0xFF8E24AA, listOf(Ingredient("Ржаной виски", "60 мл"), Ingredient("Сладкий вермут", "30 мл"), Ingredient("Ангостура биттерс", "2 капли")), "Перемешайте виски, вермут и биттерс со льдом. Процедите.", "Бокал для мартини", "Вишня"),
-        Cocktail(12, "Клубничное Просекко", "Водка", "🍾", 0xFFF0F4C3, listOf(Ingredient("Водка", "30 мл"), Ingredient("Просекко", "120 мл"), Ingredient("Клубничный сироп", "15 мл"), Ingredient("Клубника", "3 штуки")), "Подавите клубнику. Добавьте водку и сироп. Долейте просекко.", "Флюте", "Клубника"),
-        Cocktail(13, "Белый Рус", "Водка", "🥛", 0xFFD7CCC8, listOf(Ingredient("Водка", "40 мл"), Ingredient("Тёмный ром", "20 мл"), Ingredient("Сливки", "30 мл")), "Наполните роколин льдом. Налейте водку, ром и сливки.", "Роколин", "Без украшения"),
-        Cocktail(14, "Куба Либре", "Ром", "🇨🇺", 0xFF6D4C41, listOf(Ingredient("Светлый ром", "50 мл"), Ingredient("Кока-Кола", "120 мл"), Ingredient("Сок лайма", "15 мл")), "Налейте ром и лайм. Долейте кока-колу.", "Хайбол", "Долька лайма"),
-        Cocktail(15, "Гинз Тоник с огурцом", "Джин", "🥒", 0xFFA5D6A7, listOf(Ingredient("Джин", "50 мл"), Ingredient("Тоник", "150 мл"), Ingredient("Огурец", "3 слайса")), "Положите огурец. Налейте джин и тоник.", "Хайбол", "Огурец"),
-        Cocktail(16, "Амарилио", "Вино", "🍊", 0xFFEF5350, listOf(Ingredient("Просекко", "90 мл"), Ingredient("Апероль", "60 мл")), "Наполните бокал льдом. Налейте апероль и просекко.", "Винный бокал", "Долька апельсина")
-    )
-    val availableBases = listOf("Джин", "Водка", "Ром", "Теквила", "Виски", "Ржаной виски", "Вино")
-    private var nextId = initialCocktails.maxOfOrNull { it.id }?.plus(1) ?: 100
-    fun generateNextId(): Int = nextId++
-}
-EOF
-
-    - name: Create MainActivity.kt
-      run: cat > app/src/main/java/com/example/cocktailapp/ui/MainActivity.kt << 'EOF'
-package com.example.cocktailapp.ui
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import com.example.cocktailapp.ui.navigation.NavGraph
-import com.example.cocktailapp.ui.theme.CocktailAppTheme
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent { CocktailAppTheme { NavGraph() }
+      run: |
+        echo 'package com.example.cocktailapp.data' > app/src/main/java/com/example/cocktailapp/data/CocktailManager.kt
+        echo 'object CocktailManager {' >> app/src/main/java/com/example/cocktailapp/data/CocktailManager.kt
+        echo '    internal val initialCocktails = listOf(' >> app/src/main/java/com/example/cocktailapp/data/CocktailManager.kt
+        echo '        Cocktail(1, "Маргарита", "Теквила", "🍹", 0xFF4CAF50, listOf(Ingredient("Теквила", "50 мл"), Ingredient("Ликёр Контра", "20 мл"), Ingredient("Сок лайма", "15 мл")), "Нанесите соль на край бокала. Наполните шейкер льдом, добавьте теквилу, Контра и сок лайма. Хорошо взбейте. Перелейте в бокал.", "Бокал маргариты", "Долька лайма"),' >> app/src/main/java/com/example/cocktailapp/data/CocktailManager.kt
+        echo '        Cocktail(2, "Джин Тоник", "Джин", "🫧", 0xFF8BC34A, listOf(Ingredient("Джин", "50 мл"), Ingredient("Тоник", "150 мл"), Ingredient("Лимон", "1 долька")), "Наполните бокал льдом. Налейте джин и тоник. Перемешайте. Украсьте долькой лимона.", "Бокал хайбол", "Долька лимона"),' >> app/src/main/java/com/example/cocktailapp/data/CocktailManager.kt
+        echo '        Cocktail(3, "Мохито", "Ром", "🌿", 0xFF66BB6A, listOf(Ingredient("Белый ром", "50 мл"), Ingredient("Сахарный сироп", "20 мл"), Ingredient("Сок лайма", "30 мл"), Ingredient("Содовая", "100 мл"), Ingredient("Мята", "8 листочков")), "Положите мяту, добавьте сироп и лайм. Наполните льдом, влейте ром и содовую.", "Хайбол", "Мята и лайм"),' >> app/src/main/java/com/example/cocktailapp/data/CocktailManager.kt
+        echo '        Cocktail(4, "Водка Сода", "Водка", "💧", 0xFF29B6F6, listOf(Ingredient("Водка", "50 мл"), Ingredient("Содовая", "150 мл"), Ingredient("Лимон", "1 долька")), "Наполните бокал льдом. Налейте водку, долейте содовую. Перемешайте.", "Хайбол", "Долька лимона"),' >> app/src/main/java/com/example/cocktailapp/data/CocktailManager.kt
+        echo '        Cocktail(5, "Олд Фэшн", "Виски", "🥃", 0xFF8D6E63, listOf(Ingredient("Бурбон", "60 мл"), Ingredient("Ангостура биттерс", "2-3 капли"), Ingredient("Сахар", "1 кубик")), "Растолките сахар с биттерс. Добавьте бурбон и лёд. Перемешайте.", "Роколин", "Апельсиновая цедра"),' >> app/src/main/java/com/example/cocktailapp/data/CocktailManager.kt
+        echo '        Cocktail(6, "Пина Колада", "Ром", "🥥", 0xFFFFECB3, listOf(Ingredient("Белый ром", "50 мл"), Ingredient("Кокосовые сливки", "60 мл"), Ingredient("Ананасовый сок", "90 мл"), Ingredient("Лёд", "100 г")), "Взбейте всё в блендере. Перелейте в бокал.", "Гиарини", "Долька ананаса"),' >> app/src/main/java/com/example/cocktailapp/data/CocktailManager.kt
+        echo '        Cocktail(7, "Негрони", "Джин", "🔴", 0xFFE53935, listOf(Ingredient("Джин", "30 мл"), Ingredient("Кампари", "3
